@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    container: node:20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build plugin
+        run: npx @kinvolk/headlamp-plugin build
+
+      - name: Package tarball
+        run: npx @kinvolk/headlamp-plugin package
+
+      - name: Install Docker CLI
+        run: apt-get update && apt-get install -y docker.io
+
+      - name: Build Docker image
+        run: docker build -t git.farh.net/${{ github.repository }}:${{ github.ref_name }} -t git.farh.net/${{ github.repository }}:latest .
+
+      - name: Push Docker image
+        run: |
+          echo "${{ secrets.REGISTRY_TOKEN }}" | docker login git.farh.net -u ${{ github.actor }} --password-stdin
+          docker push git.farh.net/${{ github.repository }}:${{ github.ref_name }}
+          docker push git.farh.net/${{ github.repository }}:latest
+
+      - name: Create release
+        uses: akkuman/gitea-release-action@v1
+        with:
+          files: |
+            *.tar.gz
+          token: ${{ github.token }}

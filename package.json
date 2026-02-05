@@ -5,6 +5,7 @@
   "scripts": {
     "start": "headlamp-plugin start",
     "build": "headlamp-plugin build",
+    "package": "headlamp-plugin package",
     "tsc": "tsc --noEmit"
   },
   "devDependencies": {
