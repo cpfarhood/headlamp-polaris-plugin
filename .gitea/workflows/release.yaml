@@ -70,22 +70,42 @@ jobs:
       - name: Create GitHub release
         continue-on-error: true
         run: |
-          RELEASE_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+          GH_API="https://api.github.com/repos/cpfarhood/polaris-headlamp-plugin"
+          AUTH="-H \"Authorization: token ${{ secrets.GH_PAT }}\""
+          # Create release or fetch existing one
+          BODY=$(curl -s -X POST \
             -H "Authorization: token ${{ secrets.GH_PAT }}" \
             -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/cpfarhood/polaris-headlamp-plugin/releases" \
+            "${GH_API}/releases" \
             -d "{\"tag_name\":\"${GITHUB_REF_NAME}\",\"name\":\"${GITHUB_REF_NAME}\",\"generate_release_notes\":true}")
-          HTTP_CODE=$(echo "$RELEASE_RESPONSE" | tail -1)
-          BODY=$(echo "$RELEASE_RESPONSE" | sed '$d')
-          if [ "$HTTP_CODE" = "422" ]; then
+          RELEASE_ID=$(echo "$BODY" | node -e "process.stdin.resume();let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>console.log(JSON.parse(d).id))")
+          if [ "$RELEASE_ID" = "undefined" ]; then
             echo "Release already exists, fetching it..."
             BODY=$(curl -sf \
               -H "Authorization: token ${{ secrets.GH_PAT }}" \
               -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/cpfarhood/polaris-headlamp-plugin/releases/tags/${GITHUB_REF_NAME}")
+              "${GH_API}/releases/tags/${GITHUB_REF_NAME}")
+            RELEASE_ID=$(echo "$BODY" | node -e "process.stdin.resume();let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>console.log(JSON.parse(d).id))")
           fi
-          RELEASE_ID=$(echo "$BODY" | node -e "process.stdin.resume();let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>console.log(JSON.parse(d).id))")
           echo "Release ID: $RELEASE_ID"
+          # Delete any existing assets with the same name
+          ASSETS=$(curl -sf \
+            -H "Authorization: token ${{ secrets.GH_PAT }}" \
+            -H "Accept: application/vnd.github+json" \
+            "${GH_API}/releases/${RELEASE_ID}/assets")
+          echo "$ASSETS" | node -e "
+            process.stdin.resume();let d='';
+            process.stdin.on('data',c=>d+=c);
+            process.stdin.on('end',()=>{
+              const assets=JSON.parse(d);
+              assets.filter(a=>a.name==='${TARBALL}').forEach(a=>console.log(a.id));
+            })" | while read -r ASSET_ID; do
+            echo "Deleting existing asset $ASSET_ID..."
+            curl -sf -X DELETE \
+              -H "Authorization: token ${{ secrets.GH_PAT }}" \
+              "${GH_API}/releases/assets/${ASSET_ID}"
+          done
+          # Upload tarball
           curl -sf -X POST \
             -H "Authorization: token ${{ secrets.GH_PAT }}" \
             -H "Content-Type: application/gzip" \
