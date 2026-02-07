@@ -105,7 +105,9 @@ export function countResultsForItems(results: Result[]): ResultCounts {
 export function getNamespaces(data: AuditData): string[] {
   const namespaces = new Set<string>();
   for (const result of data.Results) {
-    namespaces.add(result.Namespace);
+    if (result.Namespace) {
+      namespaces.add(result.Namespace);
+    }
   }
   return Array.from(namespaces).sort();
 }
