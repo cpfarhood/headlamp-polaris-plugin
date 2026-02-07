@@ -67,7 +67,7 @@ volumeMounts:
 Download the `.tar.gz` from the [GitHub releases page](https://github.com/cpfarhood/headlamp-polaris-plugin/releases) or the [Gitea releases page](https://git.farh.net/farhoodliquor/headlamp-polaris-plugin/releases), then extract into Headlamp's plugin directory:
 
 ```bash
-tar xzf polaris-headlamp-plugin-0.0.1.tar.gz -C /headlamp/plugins/
+tar xzf headlamp-polaris-plugin-0.0.1.tar.gz -C /headlamp/plugins/
 ```
 
 ### Option 4: Build from source
@@ -129,7 +129,7 @@ This starts the Headlamp plugin dev server. Point a running Headlamp instance at
 
 ```bash
 npm run build        # outputs dist/main.js
-npm run package      # creates polaris-headlamp-plugin-<version>.tar.gz
+npm run package      # creates headlamp-polaris-plugin-<version>.tar.gz
 ```
 
 ### Type-check
