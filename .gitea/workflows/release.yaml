@@ -161,12 +161,13 @@ jobs:
         run: |
           [ "$SKIP_BUILD" = "true" ] && exit 0
           VERSION=${GITHUB_REF_NAME#v}
-          git checkout main
+          git config user.name "gitea-actions[bot]"
+          git config user.email "gitea-actions[bot]@git.farh.net"
+          git fetch origin main
+          git checkout origin/main -B main
           sed -i "s|headlamp/plugin/archive-checksum:.*|headlamp/plugin/archive-checksum: sha256:${CHECKSUM}|" artifacthub-pkg.yml
           sed -i "s|headlamp/plugin/archive-url:.*|headlamp/plugin/archive-url: \"https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/${GITHUB_REF_NAME}/headlamp-polaris-plugin-${VERSION}.tar.gz\"|" artifacthub-pkg.yml
           sed -i "s|^version:.*|version: ${VERSION}|" artifacthub-pkg.yml
-          git config user.name "gitea-actions[bot]"
-          git config user.email "gitea-actions[bot]@git.farh.net"
           git add artifacthub-pkg.yml
           git diff --cached --quiet || {
             git commit -m "ci: update artifact hub metadata for ${GITHUB_REF_NAME}"
