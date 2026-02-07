@@ -18,7 +18,7 @@ jobs:
       - name: Check if release is already finalized
         run: |
           VERSION=${GITHUB_REF_NAME#v}
-          TARBALL_URL="https://github.com/cpfarhood/polaris-headlamp-plugin/releases/download/${GITHUB_REF_NAME}/polaris-headlamp-plugin-${VERSION}.tar.gz"
+          TARBALL_URL="https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/${GITHUB_REF_NAME}/polaris-headlamp-plugin-${VERSION}.tar.gz"
           HTTP_CODE=$(curl -sL -o /tmp/release.tar.gz -w "%{http_code}" "$TARBALL_URL" 2>/dev/null)
           if [ "$HTTP_CODE" = "200" ]; then
             ACTUAL="sha256:$(sha256sum /tmp/release.tar.gz | awk '{print $1}')"
@@ -163,7 +163,7 @@ jobs:
           VERSION=${GITHUB_REF_NAME#v}
           git checkout main
           sed -i "s|headlamp/plugin/archive-checksum:.*|headlamp/plugin/archive-checksum: sha256:${CHECKSUM}|" artifacthub-pkg.yml
-          sed -i "s|headlamp/plugin/archive-url:.*|headlamp/plugin/archive-url: \"https://github.com/cpfarhood/polaris-headlamp-plugin/releases/download/${GITHUB_REF_NAME}/polaris-headlamp-plugin-${VERSION}.tar.gz\"|" artifacthub-pkg.yml
+          sed -i "s|headlamp/plugin/archive-url:.*|headlamp/plugin/archive-url: \"https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/${GITHUB_REF_NAME}/polaris-headlamp-plugin-${VERSION}.tar.gz\"|" artifacthub-pkg.yml
           sed -i "s|^version:.*|version: ${VERSION}|" artifacthub-pkg.yml
           git config user.name "gitea-actions[bot]"
           git config user.email "gitea-actions[bot]@git.farh.net"
@@ -178,7 +178,7 @@ jobs:
           git tag -f ${GITHUB_REF_NAME}
           git push -f origin ${GITHUB_REF_NAME}
           # Also push to GitHub directly to avoid waiting for mirror sync
-          git remote add github https://x-access-token:${{ secrets.GH_PAT }}@github.com/cpfarhood/polaris-headlamp-plugin.git 2>/dev/null || true
+          git remote add github https://x-access-token:${{ secrets.GH_PAT }}@github.com/cpfarhood/headlamp-polaris-plugin.git 2>/dev/null || true
           git push github main 2>/dev/null || true
           git push -f github ${GITHUB_REF_NAME} 2>/dev/null || true
           echo "Tag ${GITHUB_REF_NAME} aligned with updated metadata"

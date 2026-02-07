@@ -4,7 +4,7 @@ displayName: Polaris
 createdAt: "2026-02-05T19:00:00Z"
 description: Surfaces Fairwinds Polaris audit results inside the Headlamp UI.
 license: MIT
-homeURL: "https://github.com/cpfarhood/polaris-headlamp-plugin"
+homeURL: "https://github.com/cpfarhood/headlamp-polaris-plugin"
 category: security
 keywords:
   - polaris
@@ -15,14 +15,14 @@ keywords:
   - kubernetes
 links:
   - name: Source
-    url: "https://github.com/cpfarhood/polaris-headlamp-plugin"
+    url: "https://github.com/cpfarhood/headlamp-polaris-plugin"
   - name: Polaris
     url: "https://polaris.docs.fairwinds.com/"
 maintainers:
   - name: cpfarhood
     email: "chris@farhood.org"
 annotations:
-  headlamp/plugin/archive-url: "https://github.com/cpfarhood/polaris-headlamp-plugin/releases/download/v0.0.6/polaris-headlamp-plugin-0.0.6.tar.gz"
+  headlamp/plugin/archive-url: "https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/v0.0.6/polaris-headlamp-plugin-0.0.6.tar.gz"
   headlamp/plugin/version-compat: ">=0.26"
   headlamp/plugin/archive-checksum: sha256:12e72b6a64e3f1c73f542b6328d56391c2cc2906a9a9d7eff58fbf27f14a8680
   headlamp/plugin/distro-compat: in-cluster

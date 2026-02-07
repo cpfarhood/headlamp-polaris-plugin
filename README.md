@@ -40,14 +40,14 @@ Headlamp will fetch and install the plugin on startup.
 
 ### Option 2: Docker init container
 
-The plugin ships as a container image at `git.farh.net/farhoodliquor/polaris-headlamp-plugin`.
+The plugin ships as a container image at `git.farh.net/farhoodliquor/headlamp-polaris-plugin`.
 
 Add it as an init container in your Headlamp Helm values:
 
 ```yaml
 initContainers:
   - name: polaris-plugin
-    image: git.farh.net/farhoodliquor/polaris-headlamp-plugin:v0.0.1
+    image: git.farh.net/farhoodliquor/headlamp-polaris-plugin:v0.0.1
     command: ["sh", "-c", "cp -r /plugins/* /headlamp/plugins/"]
     volumeMounts:
       - name: plugins
@@ -64,7 +64,7 @@ volumeMounts:
 
 ### Option 3: Manual tarball install
 
-Download the `.tar.gz` from the [GitHub releases page](https://github.com/cpfarhood/polaris-headlamp-plugin/releases) or the [Gitea releases page](https://git.farh.net/farhoodliquor/polaris-headlamp-plugin/releases), then extract into Headlamp's plugin directory:
+Download the `.tar.gz` from the [GitHub releases page](https://github.com/cpfarhood/headlamp-polaris-plugin/releases) or the [Gitea releases page](https://git.farh.net/farhoodliquor/headlamp-polaris-plugin/releases), then extract into Headlamp's plugin directory:
 
 ```bash
 tar xzf polaris-headlamp-plugin-0.0.1.tar.gz -C /headlamp/plugins/
@@ -112,7 +112,7 @@ subjects:
 ### Setup
 
 ```bash
-git clone https://github.com/cpfarhood/polaris-headlamp-plugin.git
+git clone https://github.com/cpfarhood/headlamp-polaris-plugin.git
 cd polaris-headlamp-plugin
 npm install
 ```
@@ -193,7 +193,7 @@ This triggers two CI pipelines:
 **Gitea Actions** (`.gitea/workflows/release.yaml`):
 1. Build the plugin in a `node:20` container
 2. Package a `.tar.gz` tarball
-3. Build and push a Docker image to `git.farh.net/farhoodliquor/polaris-headlamp-plugin:{tag}` and `:latest`
+3. Build and push a Docker image to `git.farh.net/farhoodliquor/headlamp-polaris-plugin:{tag}` and `:latest`
 4. Create a Gitea release with the tarball attached
 
 **GitHub Actions** (`.github/workflows/release.yml`):
@@ -220,8 +220,8 @@ When releasing a new version, update `artifacthub-pkg.yml`:
 ## Links
 
 - [Artifact Hub](https://artifacthub.io/packages/headlamp/polaris-headlamp-plugin/polaris-headlamp-plugin)
-- [GitHub (mirror)](https://github.com/cpfarhood/polaris-headlamp-plugin)
-- [Gitea (source of truth)](https://git.farh.net/farhoodliquor/polaris-headlamp-plugin)
+- [GitHub (mirror)](https://github.com/cpfarhood/headlamp-polaris-plugin)
+- [Gitea (source of truth)](https://git.farh.net/farhoodliquor/headlamp-polaris-plugin)
 - [Headlamp](https://headlamp.dev/)
 - [Fairwinds Polaris](https://polaris.docs.fairwinds.com/)
 
