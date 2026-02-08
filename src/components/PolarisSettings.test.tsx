@@ -27,7 +27,6 @@ vi.mock('@kinvolk/headlamp-plugin/lib/CommonComponents', () => ({
   ),
 }));
 
-import { setRefreshInterval } from '../api/polaris';
 import PolarisSettings from './PolarisSettings';
 
 describe('PolarisSettings', () => {
