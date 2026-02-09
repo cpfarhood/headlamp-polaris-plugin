@@ -187,10 +187,15 @@ jobs:
           # that the release checksum already matches and skip the build.
           git tag -f ${GITHUB_REF_NAME}
           git push -f origin ${GITHUB_REF_NAME}
-          # Also push to GitHub directly to avoid waiting for mirror sync
-          # Single repo pattern: both stable and dev releases go to same GitHub repo
-          # ArtifactHub will differentiate based on prerelease flag in metadata
+          # Only push to GitHub main branch for STABLE releases
+          # Dev releases only create GitHub releases, don't update main branch
+          # This keeps GitHub main branch at latest stable for ArtifactHub
           git remote add github https://x-access-token:${{ secrets.GH_PAT }}@github.com/cpfarhood/headlamp-polaris-plugin.git 2>/dev/null || true
-          git push github temp-update:main 2>/dev/null || true
+          if [[ "$VERSION" != *"-dev."* ]]; then
+            echo "Stable release detected - pushing to GitHub main branch"
+            git push github temp-update:main 2>/dev/null || true
+          else
+            echo "Dev release detected - skipping GitHub main branch update"
+          fi
           git push -f github ${GITHUB_REF_NAME} 2>/dev/null || true
           echo "Tag ${GITHUB_REF_NAME} aligned with updated metadata"
