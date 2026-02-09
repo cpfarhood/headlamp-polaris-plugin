@@ -30,5 +30,5 @@ maintainers:
 annotations:
   headlamp/plugin/archive-url: "https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/v0.2.0-dev.1/headlamp-polaris-plugin-0.2.0-dev.1.tar.gz"
   headlamp/plugin/version-compat: ">=0.26"
-  headlamp/plugin/archive-checksum: sha256:e976bfb0459c8347a62f0ee1f6e11c1cf3dd8598120612f57fc38df09137abe1
+  headlamp/plugin/archive-checksum: sha256:ac4ac43b76806deb0322275e5f35742b15b747f432ab6929970b7c54d170c305
   headlamp/plugin/distro-compat: in-cluster
