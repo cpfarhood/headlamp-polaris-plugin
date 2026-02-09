@@ -117,7 +117,7 @@ describe('NamespacesListView', () => {
     expect(screen.getByText('No Polaris audit results found.')).toBeInTheDocument();
   });
 
-  it('renders namespace rows with correct scores and links', () => {
+  it('renders namespace rows with correct scores and buttons', () => {
     const data = makeAuditData([
       makeResult({
         Name: 'deploy-a',
@@ -157,12 +157,14 @@ describe('NamespacesListView', () => {
 
     renderWithRouter(<NamespacesListView />);
 
-    // Namespace links
-    const alphaLink = screen.getByText('alpha');
-    expect(alphaLink.closest('a')).toHaveAttribute('href', '/polaris/ns/alpha');
+    // Namespace buttons (now buttons instead of links for drawer)
+    const alphaButton = screen.getByText('alpha');
+    expect(alphaButton).toBeInTheDocument();
+    expect(alphaButton.tagName).toBe('BUTTON');
 
-    const betaLink = screen.getByText('beta');
-    expect(betaLink.closest('a')).toHaveAttribute('href', '/polaris/ns/beta');
+    const betaButton = screen.getByText('beta');
+    expect(betaButton).toBeInTheDocument();
+    expect(betaButton.tagName).toBe('BUTTON');
   });
 
   it('uses correct scoreStatus: >=80 success, >=50 warning, <50 error', () => {

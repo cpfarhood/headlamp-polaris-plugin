@@ -1,4 +1,3 @@
-import { Router } from '@kinvolk/headlamp-plugin/lib';
 import {
   Loader,
   NameValueTable,
@@ -7,13 +6,15 @@ import {
   SimpleTable,
   StatusLabel,
 } from '@kinvolk/headlamp-plugin/lib/CommonComponents';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import {
   computeScore,
   countResultsForItems,
   filterResultsByNamespace,
   getNamespaces,
+  POLARIS_DASHBOARD_PROXY,
+  Result,
+  ResultCounts,
 } from '../api/polaris';
 import { usePolarisDataContext } from '../api/PolarisDataContext';
 
@@ -32,8 +33,188 @@ interface NamespaceRow {
   skipped: number;
 }
 
+function resourceCounts(result: Result): ResultCounts {
+  return countResultsForItems([result]);
+}
+
+interface NamespaceDetailPanelProps {
+  namespace: string;
+  onClose: () => void;
+}
+
+function NamespaceDetailPanel({ namespace, onClose }: NamespaceDetailPanelProps) {
+  const { data, loading, error } = usePolarisDataContext();
+
+  if (loading) {
+    return (
+      <div style={{ padding: '20px' }}>
+        <Loader title={`Loading Polaris data for ${namespace}...`} />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: '20px' }}>
+        <SectionBox title="Error">
+          <NameValueTable
+            rows={[
+              {
+                name: 'Status',
+                value: <StatusLabel status="error">{error}</StatusLabel>,
+              },
+            ]}
+          />
+        </SectionBox>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div style={{ padding: '20px' }}>
+        <SectionBox title="No Data">
+          <NameValueTable rows={[{ name: 'Status', value: 'No Polaris audit results found.' }]} />
+        </SectionBox>
+      </div>
+    );
+  }
+
+  const results = filterResultsByNamespace(data, namespace);
+  const counts = countResultsForItems(results);
+  const score = computeScore(counts);
+  const status = scoreStatus(score);
+
+  const countsPerResource = new Map<string, ResultCounts>();
+  for (const r of results) {
+    countsPerResource.set(`${r.Namespace}/${r.Kind}/${r.Name}`, resourceCounts(r));
+  }
+
+  function getResourceCounts(row: Result): ResultCounts {
+    return countsPerResource.get(`${row.Namespace}/${row.Kind}/${row.Name}`) ?? resourceCounts(row);
+  }
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        right: 0,
+        top: 0,
+        bottom: 0,
+        width: '600px',
+        backgroundColor: 'var(--background-paper, #fff)',
+        boxShadow: '-2px 0 8px rgba(0,0,0,0.15)',
+        overflowY: 'auto',
+        zIndex: 1200,
+        padding: '20px',
+      }}
+    >
+      <div
+        style={{
+          marginBottom: '20px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <h2 style={{ margin: 0 }}>Polaris — {namespace}</h2>
+        <button
+          onClick={onClose}
+          style={{
+            border: 'none',
+            background: 'transparent',
+            fontSize: '24px',
+            cursor: 'pointer',
+            padding: '0 8px',
+          }}
+          aria-label="Close panel"
+        >
+          ×
+        </button>
+      </div>
+
+      <SectionBox title="External">
+        <NameValueTable
+          rows={[
+            {
+              name: 'Polaris Dashboard',
+              value: (
+                <a href={POLARIS_DASHBOARD_PROXY} target="_blank" rel="noopener noreferrer">
+                  View in Polaris Dashboard
+                </a>
+              ),
+            },
+          ]}
+        />
+      </SectionBox>
+
+      <SectionBox title="Namespace Score">
+        <NameValueTable
+          rows={[
+            {
+              name: 'Score',
+              value: <StatusLabel status={status}>{score}%</StatusLabel>,
+            },
+            { name: 'Total Checks', value: String(counts.total) },
+            {
+              name: 'Pass',
+              value: <StatusLabel status="success">{counts.pass}</StatusLabel>,
+            },
+            {
+              name: 'Warning',
+              value: <StatusLabel status="warning">{counts.warning}</StatusLabel>,
+            },
+            {
+              name: 'Danger',
+              value: <StatusLabel status="error">{counts.danger}</StatusLabel>,
+            },
+            {
+              name: 'Skipped',
+              value: (
+                <span title="Only counts checks with Severity=ignore. Annotation-based exemptions are not included.">
+                  {counts.skipped}
+                </span>
+              ),
+            },
+          ]}
+        />
+      </SectionBox>
+
+      <SectionBox title="Resources">
+        <SimpleTable
+          columns={[
+            { label: 'Name', getter: (row: Result) => row.Name },
+            { label: 'Kind', getter: (row: Result) => row.Kind },
+            {
+              label: 'Pass',
+              getter: (row: Result) => (
+                <StatusLabel status="success">{getResourceCounts(row).pass}</StatusLabel>
+              ),
+            },
+            {
+              label: 'Warning',
+              getter: (row: Result) => (
+                <StatusLabel status="warning">{getResourceCounts(row).warning}</StatusLabel>
+              ),
+            },
+            {
+              label: 'Danger',
+              getter: (row: Result) => (
+                <StatusLabel status="error">{getResourceCounts(row).danger}</StatusLabel>
+              ),
+            },
+          ]}
+          data={results}
+          emptyMessage={`No resources found in namespace "${namespace}".`}
+        />
+      </SectionBox>
+    </div>
+  );
+}
+
 export default function NamespacesListView() {
   const { data, loading, error } = usePolarisDataContext();
+  const [selectedNamespace, setSelectedNamespace] = useState<string | null>(null);
 
   if (loading) {
     return <Loader title="Loading Polaris audit data..." />;
@@ -92,13 +273,20 @@ export default function NamespacesListView() {
             {
               label: 'Namespace',
               getter: (row: NamespaceRow) => (
-                <Link
-                  to={Router.createRouteURL('polaris-namespace', {
-                    namespace: row.namespace,
-                  })}
+                <button
+                  onClick={() => setSelectedNamespace(row.namespace)}
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    color: 'var(--link-color, #1976d2)',
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                    padding: 0,
+                    font: 'inherit',
+                  }}
                 >
                   {row.namespace}
-                </Link>
+                </button>
               ),
             },
             {
@@ -130,6 +318,28 @@ export default function NamespacesListView() {
           emptyMessage="No namespaces found in Polaris audit data."
         />
       </SectionBox>
+
+      {selectedNamespace && (
+        <>
+          <div
+            onClick={() => setSelectedNamespace(null)}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 1100,
+            }}
+            aria-label="Close panel backdrop"
+          />
+          <NamespaceDetailPanel
+            namespace={selectedNamespace}
+            onClose={() => setSelectedNamespace(null)}
+          />
+        </>
+      )}
     </>
   );
 }
