@@ -102,7 +102,7 @@ function NamespaceDetailPanel({ namespace, onClose }: NamespaceDetailPanelProps)
         right: 0,
         top: 0,
         bottom: 0,
-        width: '800px',
+        width: '1000px',
         backgroundColor: 'var(--background-paper, #fff)',
         boxShadow: '-2px 0 8px rgba(0,0,0,0.15)',
         overflowY: 'auto',
