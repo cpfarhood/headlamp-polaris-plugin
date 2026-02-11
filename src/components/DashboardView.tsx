@@ -26,7 +26,6 @@ function OverviewSection(props: { data: AuditData; counts: ResultCounts }) {
     { name: 'Pass', value: counts.pass, fill: COLORS.pass },
     { name: 'Warning', value: counts.warning, fill: COLORS.warning },
     { name: 'Danger', value: counts.danger, fill: COLORS.danger },
-    { name: 'Skipped', value: counts.skipped, fill: COLORS.skipped },
   ];
 
   return (
@@ -50,14 +49,6 @@ function OverviewSection(props: { data: AuditData; counts: ResultCounts }) {
             {
               name: 'Danger',
               value: <StatusLabel status="error">{counts.danger}</StatusLabel>,
-            },
-            {
-              name: 'Skipped',
-              value: (
-                <span title="Only counts checks with Severity=ignore. Annotation-based exemptions are not included.">
-                  {counts.skipped}
-                </span>
-              ),
             },
           ]}
         />

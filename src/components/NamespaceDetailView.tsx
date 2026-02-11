@@ -12,7 +12,7 @@ import {
   computeScore,
   countResultsForItems,
   filterResultsByNamespace,
-  POLARIS_DASHBOARD_PROXY,
+  getPolarisProxyUrl,
   Result,
   ResultCounts,
 } from '../api/polaris';
@@ -89,7 +89,7 @@ export default function NamespaceDetailView() {
             {
               name: 'Polaris Dashboard',
               value: (
-                <a href={POLARIS_DASHBOARD_PROXY} target="_blank" rel="noopener noreferrer">
+                <a href={getPolarisProxyUrl()} target="_blank" rel="noopener noreferrer">
                   View in Polaris Dashboard
                 </a>
               ),

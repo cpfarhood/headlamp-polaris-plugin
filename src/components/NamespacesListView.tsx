@@ -13,7 +13,7 @@ import {
   countResultsForItems,
   filterResultsByNamespace,
   getNamespaces,
-  POLARIS_DASHBOARD_PROXY,
+  getPolarisProxyUrl,
   Result,
   ResultCounts,
 } from '../api/polaris';
@@ -102,7 +102,7 @@ function NamespaceDetailPanel({ namespace, onClose }: NamespaceDetailPanelProps)
         right: 0,
         top: 0,
         bottom: 0,
-        width: '600px',
+        width: '800px',
         backgroundColor: 'var(--background-paper, #fff)',
         boxShadow: '-2px 0 8px rgba(0,0,0,0.15)',
         overflowY: 'auto',
@@ -140,7 +140,7 @@ function NamespaceDetailPanel({ namespace, onClose }: NamespaceDetailPanelProps)
             {
               name: 'Polaris Dashboard',
               value: (
-                <a href={POLARIS_DASHBOARD_PROXY} target="_blank" rel="noopener noreferrer">
+                <a href={getPolarisProxyUrl()} target="_blank" rel="noopener noreferrer">
                   View in Polaris Dashboard
                 </a>
               ),

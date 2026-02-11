@@ -125,11 +125,14 @@ export const INTERVAL_OPTIONS = [
   { label: '30 minutes', value: 1800 },
 ];
 
-const STORAGE_KEY = 'polaris-plugin-refresh-interval';
+const REFRESH_STORAGE_KEY = 'polaris-plugin-refresh-interval';
 const DEFAULT_INTERVAL_SECONDS = 300; // 5 minutes
 
+const URL_STORAGE_KEY = 'polaris-plugin-dashboard-url';
+const DEFAULT_DASHBOARD_URL = '/api/v1/namespaces/polaris/services/polaris-dashboard:80/proxy/';
+
 export function getRefreshInterval(): number {
-  const stored = localStorage.getItem(STORAGE_KEY);
+  const stored = localStorage.getItem(REFRESH_STORAGE_KEY);
   if (stored !== null) {
     const parsed = parseInt(stored, 10);
     if (!isNaN(parsed) && parsed > 0) {
@@ -140,13 +143,26 @@ export function getRefreshInterval(): number {
 }
 
 export function setRefreshInterval(seconds: number): void {
-  localStorage.setItem(STORAGE_KEY, String(seconds));
+  localStorage.setItem(REFRESH_STORAGE_KEY, String(seconds));
+}
+
+export function getDashboardUrl(): string {
+  const stored = localStorage.getItem(URL_STORAGE_KEY);
+  if (stored !== null && stored.trim() !== '') {
+    return stored.trim();
+  }
+  return DEFAULT_DASHBOARD_URL;
+}
+
+export function setDashboardUrl(url: string): void {
+  localStorage.setItem(URL_STORAGE_KEY, url.trim());
 }
 
 // --- Polaris dashboard proxy URL ---
 
-export const POLARIS_DASHBOARD_PROXY =
-  '/api/v1/namespaces/polaris/services/polaris-dashboard:80/proxy/';
+export function getPolarisProxyUrl(): string {
+  return getDashboardUrl();
+}
 
 // --- Score computation ---
 
@@ -157,8 +173,10 @@ export function computeScore(counts: ResultCounts): number {
 
 // --- Data fetching hook ---
 
-const POLARIS_API_PATH =
-  '/api/v1/namespaces/polaris/services/polaris-dashboard:80/proxy/results.json';
+function getPolarisApiPath(): string {
+  const baseUrl = getDashboardUrl();
+  return baseUrl.endsWith('/') ? `${baseUrl}results.json` : `${baseUrl}/results.json`;
+}
 
 interface PolarisDataState {
   data: AuditData | null;
@@ -177,7 +195,7 @@ export function usePolarisData(refreshIntervalSeconds: number): PolarisDataState
 
     async function fetchData() {
       try {
-        const result: AuditData = await ApiProxy.request(POLARIS_API_PATH);
+        const result: AuditData = await ApiProxy.request(getPolarisApiPath());
         if (!cancelled) {
           setData(result);
           setError(null);
