@@ -61,4 +61,5 @@ registerRoute({
   ),
 });
 
-registerPluginSettings('polaris', PolarisSettings, true);
+// Register plugin settings
+registerPluginSettings('polaris', PolarisSettings);

@@ -103,7 +103,7 @@ function NamespaceDetailPanel({ namespace, onClose }: NamespaceDetailPanelProps)
         top: 0,
         bottom: 0,
         width: '1000px',
-        backgroundColor: 'var(--background-paper, #fff)',
+        backgroundColor: 'var(--mui-palette-background-paper, var(--background-paper, #fff))',
         boxShadow: '-2px 0 8px rgba(0,0,0,0.15)',
         overflowY: 'auto',
         zIndex: 1200,
@@ -118,7 +118,7 @@ function NamespaceDetailPanel({ namespace, onClose }: NamespaceDetailPanelProps)
           alignItems: 'center',
         }}
       >
-        <h2 style={{ margin: 0 }}>Polaris — {namespace}</h2>
+        <h2 style={{ margin: 0, color: 'var(--mui-palette-text-primary, var(--text-primary, #000))' }}>Polaris — {namespace}</h2>
         <button
           onClick={onClose}
           style={{
@@ -127,6 +127,7 @@ function NamespaceDetailPanel({ namespace, onClose }: NamespaceDetailPanelProps)
             fontSize: '24px',
             cursor: 'pointer',
             padding: '0 8px',
+            color: 'var(--mui-palette-text-primary, var(--text-primary, #000))',
           }}
           aria-label="Close panel"
         >
