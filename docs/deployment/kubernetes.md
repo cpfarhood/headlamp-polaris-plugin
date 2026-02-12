@@ -255,7 +255,7 @@ kubectl -n kube-system logs deployment/headlamp -c install-plugins
 # Plugin installation complete
 
 # Verify plugin files exist
-kubectl -n kube-system exec deployment/headlamp -- \
+kubectl -n kube-system exec deployment/headlamp -c headlamp -- \
   ls -la /headlamp/plugins/headlamp-polaris-plugin/
 
 # Expected output:

@@ -109,7 +109,7 @@ EOF
 
 ```bash
 # Verify plugin files exist
-kubectl -n kube-system exec -it deployment/headlamp -- \
+kubectl -n kube-system exec -it deployment/headlamp -c headlamp -- \
   ls /headlamp/plugins/headlamp-polaris-plugin/dist/
 
 # Expected output:

@@ -62,7 +62,7 @@ kubectl -n kube-system get configmap headlamp -o yaml | grep watchPlugins
 # Expected: watchPlugins: "false"
 
 # Verify plugin files exist
-kubectl -n kube-system exec deployment/headlamp -- \
+kubectl -n kube-system exec deployment/headlamp -c headlamp -- \
   ls -la /headlamp/plugins/headlamp-polaris-plugin/
 
 # Expected output:

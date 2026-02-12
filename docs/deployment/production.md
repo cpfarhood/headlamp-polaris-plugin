@@ -71,7 +71,7 @@ kubectl -n kube-system logs deployment/headlamp | grep -i polaris
 # Expected: No errors related to plugin loading
 
 # 4. Verify plugin files exist
-kubectl -n kube-system exec deployment/headlamp -- ls -la /headlamp/plugins/headlamp-polaris-plugin/
+kubectl -n kube-system exec deployment/headlamp -c headlamp -- ls -la /headlamp/plugins/headlamp-polaris-plugin/
 # Expected: dist/, package.json present
 ```
 

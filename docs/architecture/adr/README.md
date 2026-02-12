@@ -65,10 +65,9 @@ What becomes easier or more difficult to do because of this change?
 
 | ADR | Title | Status | Date |
 |-----|-------|--------|------|
-| [001](001-service-proxy-over-direct-access.md) | Use Service Proxy Over Direct Access | Accepted | 2025-01-15 |
-| [002](002-react-context-for-state.md) | React Context for State Management | Accepted | 2025-01-15 |
-| [003](003-drawer-navigation.md) | Drawer Navigation for Namespace Detail | Accepted | 2025-01-18 |
-| [004](004-no-mui-direct-imports.md) | Prohibit Direct MUI Imports | Accepted | 2025-01-20 |
+| [001](001-react-context-for-state.md) | Use React Context for State Management | Accepted | 2026-02-12 |
+
+**Note:** Additional ADRs documenting other significant decisions (service proxy approach, drawer navigation, MUI import restrictions) can be created following the template above.
 
 ## Creating a New ADR
 

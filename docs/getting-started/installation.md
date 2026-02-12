@@ -161,7 +161,7 @@ helm upgrade --install headlamp headlamp/headlamp \
 kubectl -n kube-system wait --for=condition=ready pod -l app.kubernetes.io/name=headlamp --timeout=300s
 
 # Verify plugin files
-kubectl -n kube-system exec -it deployment/headlamp -- ls -la /headlamp/plugins/headlamp-polaris-plugin/
+kubectl -n kube-system exec -it deployment/headlamp -c headlamp -- ls -la /headlamp/plugins/headlamp-polaris-plugin/
 
 # Expected output:
 # drwxr-xr-x  dist/
@@ -327,7 +327,7 @@ kubectl -n kube-system wait --for=condition=ready pod -l app.kubernetes.io/name=
 
 ```bash
 # Verify plugin files exist
-kubectl -n kube-system exec -it deployment/headlamp -- ls -la /headlamp/plugins/headlamp-polaris-plugin/
+kubectl -n kube-system exec -it deployment/headlamp -c headlamp -- ls -la /headlamp/plugins/headlamp-polaris-plugin/
 
 # Expected output:
 # drwxr-xr-x  dist/
