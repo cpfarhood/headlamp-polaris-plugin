@@ -71,6 +71,8 @@ jobs:
         with:
           files: ${{ env.TARBALL }}
           fail_on_unmatched_files: true
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
