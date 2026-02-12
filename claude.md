@@ -104,6 +104,7 @@ Additional considerations:
 ## MCP Servers
 
 The project has MCP server integrations configured in `.mcp.json`:
-- **Gitea** (git.farh.net): Source control via `gitea-mcp-server`
+- **GitHub**: Source control via `github-mcp-server`
 - **Kubernetes** (local): Cluster access via `kubernetes-mcp-server`
 - **Flux** (local): Flux Operator access via `flux-operator-mcp`
+- **Playwright**: Browser automation via `@playwright/mcp`

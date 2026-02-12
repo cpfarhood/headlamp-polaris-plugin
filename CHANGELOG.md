@@ -31,7 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - App bar badge, settings buttons, and UI elements now use theme-aware CSS variables
 
 ### Infrastructure
-- Migrated from Gitea to GitHub Actions exclusively
 - Added CI workflow for lint, type-check, build, and test
 - Enhanced E2E testing documentation with comprehensive guides
 - Added documentation-engineer subagent
