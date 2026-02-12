@@ -7,11 +7,11 @@ import {
 } from '@kinvolk/headlamp-plugin/lib';
 import React from 'react';
 import { PolarisDataProvider } from './api/PolarisDataContext';
+import AppBarScoreBadge from './components/AppBarScoreBadge';
 import DashboardView from './components/DashboardView';
+import InlineAuditSection from './components/InlineAuditSection';
 import NamespacesListView from './components/NamespacesListView';
 import PolarisSettings from './components/PolarisSettings';
-import InlineAuditSection from './components/InlineAuditSection';
-import AppBarScoreBadge from './components/AppBarScoreBadge';
 
 // --- Sidebar entries ---
 

@@ -1,5 +1,5 @@
+import { getCheckCategory, getCheckName } from './checkMapping';
 import { AuditData } from './polaris';
-import { getCheckName, getCheckCategory } from './checkMapping';
 
 export interface TopIssue {
   checkId: string;

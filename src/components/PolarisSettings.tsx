@@ -1,17 +1,17 @@
+import { ApiProxy } from '@kinvolk/headlamp-plugin/lib';
 import {
   NameValueTable,
   SectionBox,
   StatusLabel,
 } from '@kinvolk/headlamp-plugin/lib/CommonComponents';
-import { ApiProxy } from '@kinvolk/headlamp-plugin/lib';
 import React from 'react';
 import {
+  AuditData,
   getDashboardUrl,
   getRefreshInterval,
   INTERVAL_OPTIONS,
   setDashboardUrl,
   setRefreshInterval,
-  AuditData,
 } from '../api/polaris';
 
 interface PluginSettingsProps {

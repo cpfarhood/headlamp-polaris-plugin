@@ -1,14 +1,14 @@
 import {
   NameValueTable,
   SectionBox,
-  StatusLabel,
   SimpleTable,
+  StatusLabel,
 } from '@kinvolk/headlamp-plugin/lib/CommonComponents';
-import { Link } from 'react-router-dom';
 import React from 'react';
-import { usePolarisDataContext } from '../api/PolarisDataContext';
-import { computeScore, countResultsForItems, ResultCounts } from '../api/polaris';
+import { Link } from 'react-router-dom';
 import { getCheckName, getSeverityStatus } from '../api/checkMapping';
+import { computeScore, countResultsForItems } from '../api/polaris';
+import { usePolarisDataContext } from '../api/PolarisDataContext';
 import ExemptionManager from './ExemptionManager';
 
 interface CheckFailure {

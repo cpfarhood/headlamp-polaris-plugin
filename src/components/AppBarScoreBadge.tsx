@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { usePolarisDataContext } from '../api/PolarisDataContext';
 import { computeScore, countResults } from '../api/polaris';
+import { usePolarisDataContext } from '../api/PolarisDataContext';
 
 /**
  * App bar badge showing cluster Polaris score

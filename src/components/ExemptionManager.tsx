@@ -1,8 +1,8 @@
-import { NameValueTable, SectionBox, Dialog } from '@kinvolk/headlamp-plugin/lib/CommonComponents';
 import { ApiProxy } from '@kinvolk/headlamp-plugin/lib';
+import { Dialog, NameValueTable, SectionBox } from '@kinvolk/headlamp-plugin/lib/CommonComponents';
 import React from 'react';
-import { Result } from '../api/polaris';
 import { getCheckName } from '../api/checkMapping';
+import { Result } from '../api/polaris';
 
 interface ExemptionManagerProps {
   workloadResult: Result;

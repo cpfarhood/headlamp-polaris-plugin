@@ -9,10 +9,10 @@ import {
   StatusLabel,
 } from '@kinvolk/headlamp-plugin/lib/CommonComponents';
 import React from 'react';
+import { getSeverityStatus } from '../api/checkMapping';
 import { AuditData, computeScore, countResults, ResultCounts } from '../api/polaris';
 import { usePolarisDataContext } from '../api/PolarisDataContext';
 import { getTopIssues, TopIssue } from '../api/topIssues';
-import { getSeverityStatus } from '../api/checkMapping';
 
 const COLORS = {
   pass: '#4caf50',
