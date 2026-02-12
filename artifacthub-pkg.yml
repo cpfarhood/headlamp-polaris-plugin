@@ -1,4 +1,4 @@
-version: 0.2.5
+version: 0.3.0
 name: headlamp-polaris-plugin
 displayName: Polaris
 createdAt: "2026-02-05T19:00:00Z"
@@ -28,7 +28,7 @@ maintainers:
   - name: cpfarhood
     email: "chris@farhood.org"
 annotations:
-  headlamp/plugin/archive-url: "https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/v0.2.5/headlamp-polaris-plugin-0.2.5.tar.gz"
+  headlamp/plugin/archive-url: "https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/v0.3.0/headlamp-polaris-plugin-0.3.0.tar.gz"
   headlamp/plugin/version-compat: ">=0.26"
-  headlamp/plugin/archive-checksum: sha256:5b15832d0cb4acf796bc6816d0c9b5ab244de11c26d96e5602525f65ab3f53bb
+  headlamp/plugin/archive-checksum: sha256:0000000000000000000000000000000000000000000000000000000000000000
   headlamp/plugin/distro-compat: in-cluster

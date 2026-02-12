@@ -5,11 +5,16 @@ import {
   PercentageCircle,
   SectionBox,
   SectionHeader,
+  SimpleTable,
   StatusLabel,
 } from '@kinvolk/headlamp-plugin/lib/CommonComponents';
+import { Button } from '@mui/material';
+import { Refresh as RefreshIcon } from '@mui/icons-material';
 import React from 'react';
 import { AuditData, computeScore, countResults, ResultCounts } from '../api/polaris';
 import { usePolarisDataContext } from '../api/PolarisDataContext';
+import { getTopIssues, TopIssue } from '../api/topIssues';
+import { getSeverityStatus } from '../api/checkMapping';
 
 const COLORS = {
   pass: '#4caf50',
@@ -67,18 +72,52 @@ function OverviewSection(props: { data: AuditData; counts: ResultCounts }) {
   );
 }
 
+function formatAuditTime(auditTime: string): string {
+  const date = new Date(auditTime);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+
+  if (diffMins < 1) return 'just now';
+  if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+}
+
 export default function DashboardView() {
-  const { data, loading, error } = usePolarisDataContext();
+  const { data, loading, error, refresh } = usePolarisDataContext();
 
   if (loading) {
     return <Loader title="Loading Polaris audit data..." />;
   }
 
   const counts = data ? countResults(data) : null;
+  const topIssues = data ? getTopIssues(data) : [];
 
   return (
     <>
-      <SectionHeader title="Polaris — Overview" />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <SectionHeader title="Polaris — Overview" />
+        {data && (
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <span style={{ fontSize: '14px', color: 'var(--mui-palette-text-secondary, #666)' }}>
+              Last updated: {formatAuditTime(data.AuditTime)}
+            </span>
+            <Button
+              variant="outlined"
+              startIcon={<RefreshIcon />}
+              onClick={refresh}
+              size="small"
+            >
+              Refresh
+            </Button>
+          </div>
+        )}
+      </div>
 
       {error && (
         <SectionBox title="Error">
@@ -93,7 +132,35 @@ export default function DashboardView() {
         </SectionBox>
       )}
 
-      {data && counts && <OverviewSection data={data} counts={counts} />}
+      {data && counts && (
+        <>
+          <OverviewSection data={data} counts={counts} />
+
+          {topIssues.length > 0 && (
+            <SectionBox title="Top Issues">
+              <SimpleTable
+                columns={[
+                  { label: 'Check', getter: (issue: TopIssue) => issue.checkName },
+                  { label: 'Category', getter: (issue: TopIssue) => issue.category },
+                  {
+                    label: 'Severity',
+                    getter: (issue: TopIssue) => (
+                      <StatusLabel status={getSeverityStatus(issue.severity)}>
+                        {issue.severity}
+                      </StatusLabel>
+                    ),
+                  },
+                  {
+                    label: 'Affected Workloads',
+                    getter: (issue: TopIssue) => String(issue.count),
+                  },
+                ]}
+                data={topIssues}
+              />
+            </SectionBox>
+          )}
+        </>
+      )}
 
       {!data && !error && (
         <SectionBox title="No Data">

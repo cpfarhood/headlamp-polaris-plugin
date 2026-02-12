@@ -6,18 +6,29 @@ A [Headlamp](https://headlamp.dev/) plugin that surfaces [Fairwinds Polaris](htt
 
 ## What It Does
 
-Adds a **Polaris** top-level sidebar section to Headlamp with the following views:
+Adds a **Polaris** top-level sidebar section to Headlamp with comprehensive security, reliability, and efficiency audit integration:
 
-- **Overview** -- cluster score as a percentage (color-coded green/amber/red), check summary (pass/warning/danger/skipped counts), and cluster info (nodes, pods, namespaces, controllers)
-- **Namespaces** -- table of all namespaces with per-namespace score, pass/warning/danger/skipped counts; click a namespace to drill down
-- **Namespace detail** -- per-namespace score, check counts, and a resource table showing pass/warning/danger per workload
-- **External link** -- quick jump to the native Polaris dashboard via the Kubernetes service proxy (from namespace detail view)
+### Main Views
 
-Data is fetched from the Polaris dashboard API through the Kubernetes service proxy (`/api/v1/namespaces/polaris/services/polaris-dashboard/proxy/results.json`). The plugin is read-only -- it never writes to the cluster.
+- **Overview Dashboard** -- cluster score with percentage gauge, check distribution charts, top 10 most common failing checks across the cluster, cluster statistics, and last audit time with manual refresh button
+- **Namespaces** -- table of all namespaces with per-namespace score and check counts; click a namespace to open a detailed side panel (1000px wide, theme-aware)
+- **Namespace Detail Panel** -- per-namespace score, check counts, resource-level audit results, external Polaris dashboard link, and exemption management
 
-Results are refreshed on a user-configurable interval (1 / 5 / 10 / 30 minutes, default 5). The setting is available in **Settings > Plugins > Polaris** and persists in the browser's localStorage.
+### Integrated Features
 
-Error states are handled explicitly: RBAC denied (403), Polaris not installed (404/503), malformed JSON, and loading.
+- **App Bar Score Badge** -- cluster Polaris score displayed as a colored chip in the top navigation bar (green ≥80%, yellow ≥50%, red <50%); click to navigate to overview
+- **Inline Resource Audits** -- Polaris audit results automatically injected into detail views for Deployments, StatefulSets, DaemonSets, Jobs, and CronJobs; shows compact score, failing checks table, and link to full report
+- **Exemption Management** -- add or remove Polaris exemptions via annotation patches directly from the UI; supports per-check exemptions or exempt-all
+- **Configurable Dashboard URL** -- supports both Kubernetes service proxy URLs and full HTTP/HTTPS URLs for external Polaris deployments
+- **Connection Testing** -- test button in settings to verify Polaris dashboard connectivity and show version info
+
+### Data & Refresh
+
+Data is fetched from the Polaris dashboard API through the Kubernetes service proxy (`/api/v1/namespaces/polaris/services/polaris-dashboard:80/proxy/results.json`) or custom URLs. The plugin is primarily read-only; it only writes when explicitly applying exemption annotations.
+
+Results are refreshed on a user-configurable interval (1 / 5 / 10 / 30 minutes, default 5). Settings are available in **Settings > Plugins > Polaris** and persist in browser localStorage.
+
+Error states are handled explicitly with context-specific messages: RBAC denied (403), Polaris not installed (404/503), malformed JSON, network failures, and CORS issues.
 
 ## Prerequisites
 

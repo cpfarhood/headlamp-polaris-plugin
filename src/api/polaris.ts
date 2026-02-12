@@ -186,6 +186,7 @@ interface PolarisDataState {
   data: AuditData | null;
   loading: boolean;
   error: string | null;
+  triggerRefresh: () => void;
 }
 
 export function usePolarisData(refreshIntervalSeconds: number): PolarisDataState {
@@ -193,6 +194,10 @@ export function usePolarisData(refreshIntervalSeconds: number): PolarisDataState
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [tick, setTick] = React.useState(0);
+
+  const triggerRefresh = React.useCallback(() => {
+    setTick(t => t + 1);
+  }, []);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -266,5 +271,5 @@ export function usePolarisData(refreshIntervalSeconds: number): PolarisDataState
     return () => window.clearInterval(intervalId);
   }, [refreshIntervalSeconds]);
 
-  return { data, loading, error };
+  return { data, loading, error, triggerRefresh };
 }

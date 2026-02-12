@@ -1,4 +1,6 @@
 import {
+  registerAppBarAction,
+  registerDetailsViewSection,
   registerPluginSettings,
   registerRoute,
   registerSidebarEntry,
@@ -8,6 +10,8 @@ import { PolarisDataProvider } from './api/PolarisDataContext';
 import DashboardView from './components/DashboardView';
 import NamespacesListView from './components/NamespacesListView';
 import PolarisSettings from './components/PolarisSettings';
+import InlineAuditSection from './components/InlineAuditSection';
+import AppBarScoreBadge from './components/AppBarScoreBadge';
 
 // --- Sidebar entries ---
 
@@ -63,3 +67,25 @@ registerRoute({
 
 // Register plugin settings
 registerPluginSettings('polaris', PolarisSettings);
+
+// Register details view section for supported controller types
+registerDetailsViewSection('polaris-audit', ({ resource }) => {
+  const supportedKinds = ['Deployment', 'StatefulSet', 'DaemonSet', 'Job', 'CronJob'];
+
+  if (!supportedKinds.includes(resource?.kind)) {
+    return null;
+  }
+
+  return (
+    <PolarisDataProvider>
+      <InlineAuditSection resource={resource} />
+    </PolarisDataProvider>
+  );
+});
+
+// Register app bar score badge
+registerAppBarAction('polaris-score', () => (
+  <PolarisDataProvider>
+    <AppBarScoreBadge />
+  </PolarisDataProvider>
+));
