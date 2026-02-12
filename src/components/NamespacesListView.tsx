@@ -108,18 +108,12 @@ function NamespaceDetailPanel({ namespace, onClose }: NamespaceDetailPanelProps)
             top: 0;
             bottom: 0;
             width: 1000px;
-            background-color: #ffffff;
-            color: var(--mui-palette-text-primary, #000);
+            background-color: var(--mui-palette-background-default, #fafafa);
+            color: var(--mui-palette-text-primary);
             box-shadow: -2px 0 8px rgba(0,0,0,0.15);
             overflow-y: auto;
             z-index: 1200;
             padding: 20px;
-          }
-          @media (prefers-color-scheme: dark) {
-            .${drawerClass} {
-              background-color: #1e1e1e;
-              color: var(--mui-palette-text-primary, #fff);
-            }
           }
         `}
       </style>
