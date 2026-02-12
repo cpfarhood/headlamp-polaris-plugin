@@ -6,124 +6,97 @@ on:
       - 'v*'
 
 jobs:
-  release:
+  build-and-release:
     runs-on: local-ubuntu-latest
     permissions:
       contents: write
-      packages: write
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
+      checksum: ${{ steps.compute_checksum.outputs.checksum }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check if release is already finalized
+      - name: Extract version from tag
+        id: extract_version
         run: |
           VERSION=${GITHUB_REF_NAME#v}
-          TARBALL_URL="https://github.com/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}/polaris-${VERSION}.tar.gz"
-          HTTP_CODE=$(curl -sL -o /tmp/release.tar.gz -w "%{http_code}" "$TARBALL_URL" 2>/dev/null)
-          if [ "$HTTP_CODE" = "200" ]; then
-            ACTUAL="sha256:$(sha256sum /tmp/release.tar.gz | awk '{print $1}')"
-            EXPECTED=$(grep 'archive-checksum' artifacthub-pkg.yml | awk '{print $2}')
-            echo "Release tarball checksum: $ACTUAL"
-            echo "Metadata checksum:        $EXPECTED"
-            if [ "$ACTUAL" = "$EXPECTED" ]; then
-              echo "SKIP_BUILD=true" >> $GITHUB_ENV
-              echo "Checksums match - release is finalized, nothing to do"
-            fi
-          else
-            echo "No existing release (HTTP $HTTP_CODE) - will build"
-          fi
-          rm -f /tmp/release.tar.gz
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "Version: ${VERSION}"
 
       - name: Setup Node.js
-        if: env.SKIP_BUILD != 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        if: env.SKIP_BUILD != 'true'
         run: npm ci
 
       - name: Build plugin
-        if: env.SKIP_BUILD != 'true'
         run: npx @kinvolk/headlamp-plugin build
 
-      - name: Package tarball
-        if: env.SKIP_BUILD != 'true'
+      - name: Package plugin
         run: npx @kinvolk/headlamp-plugin package
 
-      - name: Validate tarball name matches package.json
-        if: env.SKIP_BUILD != 'true'
+      - name: Validate tarball name
         run: |
-          PACKAGE_NAME=$(jq -r '.name' package.json)
-          VERSION=${GITHUB_REF_NAME#v}
-          EXPECTED_TARBALL="${PACKAGE_NAME}-${VERSION}.tar.gz"
-          ACTUAL_TARBALL=$(ls *.tar.gz)
-
-          if [ "$EXPECTED_TARBALL" != "$ACTUAL_TARBALL" ]; then
-            echo "::error::Tarball name mismatch!"
-            echo "Expected: $EXPECTED_TARBALL"
-            echo "Actual:   $ACTUAL_TARBALL"
-            echo "Update workflow to use correct tarball name pattern"
+          EXPECTED="polaris-${{ steps.extract_version.outputs.version }}.tar.gz"
+          ACTUAL=$(ls *.tar.gz)
+          if [ "$EXPECTED" != "$ACTUAL" ]; then
+            echo "::error::Tarball name mismatch! Expected: $EXPECTED, Got: $ACTUAL"
             exit 1
           fi
-          echo "✓ Tarball name validation passed: $ACTUAL_TARBALL"
+          echo "✓ Tarball name validated: $ACTUAL"
 
-      - name: Compute tarball checksum
-        if: env.SKIP_BUILD != 'true'
+      - name: Compute checksum
+        id: compute_checksum
         run: |
-          TARBALL=$(ls *.tar.gz)
+          TARBALL="polaris-${{ steps.extract_version.outputs.version }}.tar.gz"
           CHECKSUM=$(sha256sum "$TARBALL" | awk '{print $1}')
-          echo "TARBALL=$TARBALL" >> $GITHUB_ENV
-          echo "CHECKSUM=$CHECKSUM" >> $GITHUB_ENV
-          echo "Tarball: $TARBALL"
-          echo "Checksum: sha256:$CHECKSUM"
+          echo "checksum=${CHECKSUM}" >> $GITHUB_OUTPUT
+          echo "Checksum: sha256:${CHECKSUM}"
 
-      - name: Create draft release and upload tarball
-        if: env.SKIP_BUILD != 'true'
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ env.TARBALL }}
+          files: polaris-${{ steps.extract_version.outputs.version }}.tar.gz
           fail_on_unmatched_files: true
-          draft: true
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish release
-        if: env.SKIP_BUILD != 'true'
-        uses: softprops/action-gh-release@v2
-        with:
           draft: false
+          prerelease: false
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update metadata and align tag
-        if: env.SKIP_BUILD != 'true'
+  update-metadata:
+    needs: build-and-release
+    runs-on: local-ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
         run: |
-          VERSION=${GITHUB_REF_NAME#v}
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Update metadata
-          git fetch origin main
-          git checkout origin/main -B temp-update
+      - name: Update checksum in metadata
+        run: |
+          VERSION="${{ needs.build-and-release.outputs.version }}"
+          CHECKSUM="${{ needs.build-and-release.outputs.checksum }}"
+
           sed -i "s|headlamp/plugin/archive-checksum:.*|headlamp/plugin/archive-checksum: sha256:${CHECKSUM}|" artifacthub-pkg.yml
-          sed -i "s|headlamp/plugin/archive-url:.*|headlamp/plugin/archive-url: \"https://github.com/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}/polaris-${VERSION}.tar.gz\"|" artifacthub-pkg.yml
-          sed -i "s|^version:.*|version: ${VERSION}|" artifacthub-pkg.yml
+
           git add artifacthub-pkg.yml
-
           if ! git diff --cached --quiet; then
-            git commit -m "ci: update artifact hub metadata for ${GITHUB_REF_NAME}"
-            git push origin temp-update:main
+            git commit -m "ci: update checksum for v${VERSION}"
+            git push origin main
+            echo "✓ Checksum updated on main branch"
+          else
+            echo "✓ Checksum already up to date"
           fi
-
-          # Force-move tag to the commit with correct checksum.
-          # This triggers a new CI run, but the guard step will detect
-          # that the release checksum already matches and skip the build.
-          git tag -f ${GITHUB_REF_NAME}
-          git push -f origin ${GITHUB_REF_NAME}
-          echo "Tag ${GITHUB_REF_NAME} aligned with updated metadata"
