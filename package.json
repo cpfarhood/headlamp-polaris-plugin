@@ -4,12 +4,12 @@
   "description": "Headlamp plugin for Fairwinds Polaris audit results",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cpfarhood/headlamp-polaris-plugin.git"
+    "url": "https://github.com/privilegedescalation/headlamp-polaris-plugin.git"
   },
   "bugs": {
-    "url": "https://github.com/cpfarhood/headlamp-polaris-plugin/issues"
+    "url": "https://github.com/privilegedescalation/headlamp-polaris-plugin/issues"
   },
-  "homepage": "https://github.com/cpfarhood/headlamp-polaris-plugin#readme",
+  "homepage": "https://github.com/privilegedescalation/headlamp-polaris-plugin#readme",
   "author": "cpfarhood",
   "license": "Apache-2.0",
   "scripts": {

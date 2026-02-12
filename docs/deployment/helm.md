@@ -185,7 +185,7 @@ data:
   plugin.yml: |
     - name: headlamp-polaris-plugin
       version: 0.3.5
-      url: https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/v0.3.5/headlamp-polaris-plugin-0.3.5.tar.gz
+      url: https://github.com/privilegedescalation/headlamp-polaris-plugin/releases/download/v0.3.5/headlamp-polaris-plugin-0.3.5.tar.gz
 ```
 
 Apply ConfigMap then deploy Headlamp:

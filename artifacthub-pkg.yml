@@ -10,7 +10,7 @@ description: >-
   Requires a Role granting `get` on `services/proxy` for the
   `polaris-dashboard` service in the `polaris` namespace.
 license: MIT
-homeURL: "https://github.com/cpfarhood/headlamp-polaris-plugin"
+homeURL: "https://github.com/privilegedescalation/headlamp-polaris-plugin"
 category: security
 keywords:
   - polaris
@@ -21,14 +21,14 @@ keywords:
   - kubernetes
 links:
   - name: Source
-    url: "https://github.com/cpfarhood/headlamp-polaris-plugin"
+    url: "https://github.com/privilegedescalation/headlamp-polaris-plugin"
   - name: Polaris
     url: "https://polaris.docs.fairwinds.com/"
 maintainers:
   - name: cpfarhood
     email: "chris@farhood.org"
 annotations:
-  headlamp/plugin/archive-url: "https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/v0.3.10/polaris-0.3.10.tar.gz"
+  headlamp/plugin/archive-url: "https://github.com/privilegedescalation/headlamp-polaris-plugin/releases/download/v0.3.10/polaris-0.3.10.tar.gz"
   headlamp/plugin/version-compat: ">=0.26"
   headlamp/plugin/archive-checksum: sha256:7df8d2066276eec0bdaad98d8a5bd7350861acc216963f7421c5ae476cd725b4
   headlamp/plugin/distro-compat: in-cluster

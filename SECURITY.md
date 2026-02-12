@@ -194,7 +194,7 @@ We apply security updates to the latest release only. Please ensure you are runn
 
 If you discover a security vulnerability in this plugin, please report it via:
 
-1. **GitHub Security Advisories**: [Report a vulnerability](https://github.com/cpfarhood/headlamp-polaris-plugin/security/advisories/new)
+1. **GitHub Security Advisories**: [Report a vulnerability](https://github.com/privilegedescalation/headlamp-polaris-plugin/security/advisories/new)
 2. **Email**: Create a GitHub issue and mark it as "security" if advisories are not available
 
 **Please do not:**
@@ -334,7 +334,7 @@ The plugin processes only technical metadata (resource names, namespaces, check 
 Subscribe to security updates via:
 
 1. **GitHub Watch**: Click "Watch" → "Custom" → "Security alerts"
-2. **GitHub Releases**: Monitor [releases page](https://github.com/cpfarhood/headlamp-polaris-plugin/releases)
+2. **GitHub Releases**: Monitor [releases page](https://github.com/privilegedescalation/headlamp-polaris-plugin/releases)
 3. **ArtifactHub**: Follow package at [ArtifactHub](https://artifacthub.io/packages/headlamp/headlamp-polaris-plugin/headlamp-polaris-plugin)
 
 ### Security Patch Process
@@ -349,9 +349,9 @@ When a security vulnerability is identified:
 
 ## Contact
 
-- **Security Issues**: [GitHub Security Advisories](https://github.com/cpfarhood/headlamp-polaris-plugin/security/advisories)
-- **General Questions**: [GitHub Discussions](https://github.com/cpfarhood/headlamp-polaris-plugin/discussions)
-- **Bug Reports**: [GitHub Issues](https://github.com/cpfarhood/headlamp-polaris-plugin/issues)
+- **Security Issues**: [GitHub Security Advisories](https://github.com/privilegedescalation/headlamp-polaris-plugin/security/advisories)
+- **General Questions**: [GitHub Discussions](https://github.com/privilegedescalation/headlamp-polaris-plugin/discussions)
+- **Bug Reports**: [GitHub Issues](https://github.com/privilegedescalation/headlamp-polaris-plugin/issues)
 
 ## License
 

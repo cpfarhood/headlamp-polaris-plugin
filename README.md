@@ -1,8 +1,8 @@
 # Headlamp Polaris Plugin
 
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/polaris)](https://artifacthub.io/packages/headlamp/polaris/headlamp-polaris-plugin)
-[![CI](https://github.com/cpfarhood/headlamp-polaris-plugin/actions/workflows/ci.yaml/badge.svg)](https://github.com/cpfarhood/headlamp-polaris-plugin/actions/workflows/ci.yaml)
-[![E2E Tests](https://github.com/cpfarhood/headlamp-polaris-plugin/actions/workflows/e2e.yaml/badge.svg)](https://github.com/cpfarhood/headlamp-polaris-plugin/actions/workflows/e2e.yaml)
+[![CI](https://github.com/privilegedescalation/headlamp-polaris-plugin/actions/workflows/ci.yaml/badge.svg)](https://github.com/privilegedescalation/headlamp-polaris-plugin/actions/workflows/ci.yaml)
+[![E2E Tests](https://github.com/privilegedescalation/headlamp-polaris-plugin/actions/workflows/e2e.yaml/badge.svg)](https://github.com/privilegedescalation/headlamp-polaris-plugin/actions/workflows/e2e.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A [Headlamp](https://headlamp.dev/) plugin that surfaces [Fairwinds Polaris](https://polaris.docs.fairwinds.com/) audit results directly in the Headlamp UI.
@@ -62,7 +62,7 @@ config:
 pluginsManager:
   sources:
     - name: headlamp-polaris-plugin
-      url: https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/v0.3.5/headlamp-polaris-plugin-0.3.5.tar.gz
+      url: https://github.com/privilegedescalation/headlamp-polaris-plugin/releases/download/v0.3.5/headlamp-polaris-plugin-0.3.5.tar.gz
 ```
 
 Or install via the Headlamp UI:
@@ -96,17 +96,17 @@ sidecars:
 
 ### Option 3: Manual Tarball Install
 
-Download the `.tar.gz` from the [GitHub releases page](https://github.com/cpfarhood/headlamp-polaris-plugin/releases), then extract into Headlamp's plugin directory:
+Download the `.tar.gz` from the [GitHub releases page](https://github.com/privilegedescalation/headlamp-polaris-plugin/releases), then extract into Headlamp's plugin directory:
 
 ```bash
-wget https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/v0.3.5/headlamp-polaris-plugin-0.3.5.tar.gz
+wget https://github.com/privilegedescalation/headlamp-polaris-plugin/releases/download/v0.3.5/headlamp-polaris-plugin-0.3.5.tar.gz
 tar xzf headlamp-polaris-plugin-0.3.5.tar.gz -C /headlamp/plugins/
 ```
 
 ### Option 4: Build from Source
 
 ```bash
-git clone https://github.com/cpfarhood/headlamp-polaris-plugin.git
+git clone https://github.com/privilegedescalation/headlamp-polaris-plugin.git
 cd headlamp-polaris-plugin
 npm install
 npm run build
@@ -214,7 +214,7 @@ Quick reference:
 
 ```bash
 # Clone repository
-git clone https://github.com/cpfarhood/headlamp-polaris-plugin.git
+git clone https://github.com/privilegedescalation/headlamp-polaris-plugin.git
 cd headlamp-polaris-plugin
 
 # Install dependencies
@@ -365,7 +365,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for:
 
 ## Links
 
-- **[GitHub Repository](https://github.com/cpfarhood/headlamp-polaris-plugin)** - Source code, issues, releases
+- **[GitHub Repository](https://github.com/privilegedescalation/headlamp-polaris-plugin)** - Source code, issues, releases
 - **[Artifact Hub](https://artifacthub.io/packages/headlamp/polaris/headlamp-polaris-plugin)** - Plugin catalog listing
 - **[Headlamp](https://headlamp.dev/)** - Kubernetes web UI
 - **[Fairwinds Polaris](https://polaris.docs.fairwinds.com/)** - Kubernetes best practices audit tool

@@ -447,8 +447,8 @@ For testing before stable release:
 
 ## Getting Help
 
-- **Questions:** Open a [GitHub Discussion](https://github.com/cpfarhood/headlamp-polaris-plugin/discussions)
-- **Bugs:** Open a [GitHub Issue](https://github.com/cpfarhood/headlamp-polaris-plugin/issues)
+- **Questions:** Open a [GitHub Discussion](https://github.com/privilegedescalation/headlamp-polaris-plugin/discussions)
+- **Bugs:** Open a [GitHub Issue](https://github.com/privilegedescalation/headlamp-polaris-plugin/issues)
 - **E2E Testing:** See [e2e/README.md](e2e/README.md)
 - **Architecture:** See [CLAUDE.md](CLAUDE.md)
 

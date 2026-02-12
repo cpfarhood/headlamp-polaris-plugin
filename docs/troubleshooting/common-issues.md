@@ -572,7 +572,7 @@ kubectl get configmap headlamp-plugin-config -n kube-system -o yaml
 
 Expected format:
 ```
-https://github.com/cpfarhood/headlamp-polaris-plugin/releases/download/v0.3.5/headlamp-polaris-plugin-0.3.5.tar.gz
+https://github.com/privilegedescalation/headlamp-polaris-plugin/releases/download/v0.3.5/headlamp-polaris-plugin-0.3.5.tar.gz
 ```
 
 ---
@@ -672,7 +672,7 @@ If none of these solutions work, gather debugging information and open an issue:
 
 ### Where to Get Help
 
-- **GitHub Issues**: [https://github.com/cpfarhood/headlamp-polaris-plugin/issues](https://github.com/cpfarhood/headlamp-polaris-plugin/issues)
-- **GitHub Discussions**: [https://github.com/cpfarhood/headlamp-polaris-plugin/discussions](https://github.com/cpfarhood/headlamp-polaris-plugin/discussions)
+- **GitHub Issues**: [https://github.com/privilegedescalation/headlamp-polaris-plugin/issues](https://github.com/privilegedescalation/headlamp-polaris-plugin/issues)
+- **GitHub Discussions**: [https://github.com/privilegedescalation/headlamp-polaris-plugin/discussions](https://github.com/privilegedescalation/headlamp-polaris-plugin/discussions)
 
 Include the debugging information above when opening an issue.

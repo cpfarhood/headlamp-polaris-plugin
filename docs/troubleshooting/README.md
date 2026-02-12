@@ -155,7 +155,7 @@ If the quick diagnosis doesn't resolve your issue:
    - [Deployment Guide](../deployment/kubernetes.md)
 
 3. **Open a GitHub issue:**
-   - [GitHub Issues](https://github.com/cpfarhood/headlamp-polaris-plugin/issues)
+   - [GitHub Issues](https://github.com/privilegedescalation/headlamp-polaris-plugin/issues)
    - Include: Headlamp version, plugin version, error messages, logs
 
 ## References
