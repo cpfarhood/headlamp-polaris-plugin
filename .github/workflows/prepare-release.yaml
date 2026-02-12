@@ -1,5 +1,8 @@
 name: Prepare Release
 
+# Uses GitHub App token (GH_APP_TOKEN) to trigger the release workflow
+# GITHUB_TOKEN cannot trigger other workflows due to GitHub security policy
+
 on:
   workflow_dispatch:
     inputs:
@@ -24,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_APP_TOKEN }}
 
       - name: Configure git
         run: |
