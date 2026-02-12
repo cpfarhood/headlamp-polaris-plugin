@@ -55,6 +55,23 @@ jobs:
         if: env.SKIP_BUILD != 'true'
         run: npx @kinvolk/headlamp-plugin package
 
+      - name: Validate tarball name matches package.json
+        if: env.SKIP_BUILD != 'true'
+        run: |
+          PACKAGE_NAME=$(jq -r '.name' package.json)
+          VERSION=${GITHUB_REF_NAME#v}
+          EXPECTED_TARBALL="${PACKAGE_NAME}-${VERSION}.tar.gz"
+          ACTUAL_TARBALL=$(ls *.tar.gz)
+
+          if [ "$EXPECTED_TARBALL" != "$ACTUAL_TARBALL" ]; then
+            echo "::error::Tarball name mismatch!"
+            echo "Expected: $EXPECTED_TARBALL"
+            echo "Actual:   $ACTUAL_TARBALL"
+            echo "Update workflow to use correct tarball name pattern"
+            exit 1
+          fi
+          echo "✓ Tarball name validation passed: $ACTUAL_TARBALL"
+
       - name: Compute tarball checksum
         if: env.SKIP_BUILD != 'true'
         run: |
@@ -65,14 +82,22 @@ jobs:
           echo "Tarball: $TARBALL"
           echo "Checksum: sha256:$CHECKSUM"
 
-      - name: Create GitHub release and upload tarball
+      - name: Create draft release and upload tarball
         if: env.SKIP_BUILD != 'true'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: ${{ env.TARBALL }}
           fail_on_unmatched_files: true
-          draft: false
+          draft: true
           prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish release
+        if: env.SKIP_BUILD != 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
