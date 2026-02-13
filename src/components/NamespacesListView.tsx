@@ -44,6 +44,7 @@ interface NamespaceDetailPanelProps {
 }
 
 function NamespaceDetailPanel({ namespace, onClose }: NamespaceDetailPanelProps) {
+  const [isMaximized, setIsMaximized] = React.useState(false);
   const { data, loading, error } = usePolarisDataContext();
 
   if (loading) {
@@ -107,13 +108,14 @@ function NamespaceDetailPanel({ namespace, onClose }: NamespaceDetailPanelProps)
             right: 0;
             top: 0;
             bottom: 0;
-            width: 1000px;
+            width: ${isMaximized ? 'calc(100vw - 240px)' : '1000px'};
             background-color: var(--mui-palette-background-default, #fafafa);
             color: var(--mui-palette-text-primary);
             box-shadow: -2px 0 8px rgba(0,0,0,0.15);
             overflow-y: auto;
             z-index: 1200;
             padding: 20px;
+            transition: width 0.3s ease;
           }
         `}
       </style>
@@ -129,20 +131,54 @@ function NamespaceDetailPanel({ namespace, onClose }: NamespaceDetailPanelProps)
           <h2 style={{ margin: 0, color: 'var(--mui-palette-text-primary)' }}>
             Polaris — {namespace}
           </h2>
-          <button
-            onClick={onClose}
-            style={{
-              border: 'none',
-              background: 'transparent',
-              fontSize: '24px',
-              cursor: 'pointer',
-              padding: '0 8px',
-              color: 'var(--mui-palette-text-primary)',
-            }}
-            aria-label="Close panel"
-          >
-            ×
-          </button>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <button
+              onClick={() => setIsMaximized(!isMaximized)}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                fontSize: '20px',
+                cursor: 'pointer',
+                padding: '4px 8px',
+                color: 'var(--mui-palette-text-secondary, #666)',
+                borderRadius: '4px',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor =
+                  'var(--mui-palette-action-hover, rgba(0, 0, 0, 0.04))';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
+              aria-label={isMaximized ? 'Minimize panel' : 'Maximize panel'}
+              title={isMaximized ? 'Minimize' : 'Maximize'}
+            >
+              {isMaximized ? '⊟' : '⊡'}
+            </button>
+            <button
+              onClick={onClose}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                fontSize: '24px',
+                cursor: 'pointer',
+                padding: '4px 8px',
+                color: 'var(--mui-palette-text-secondary, #666)',
+                borderRadius: '4px',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor =
+                  'var(--mui-palette-action-hover, rgba(0, 0, 0, 0.04))';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
+              aria-label="Close panel"
+              title="Close"
+            >
+              ×
+            </button>
+          </div>
         </div>
 
         <SectionBox title="External">
