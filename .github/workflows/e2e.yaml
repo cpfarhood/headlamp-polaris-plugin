@@ -31,7 +31,7 @@ jobs:
       - name: Run E2E tests
         run: npm run e2e
         env:
-          HEADLAMP_URL: ${{ secrets.HEADLAMP_URL || 'https://headlamp.animaniacs.farh.net' }}
+          HEADLAMP_URL: ${{ secrets.HEADLAMP_URL || 'http://10.43.61.138' }}
           HEADLAMP_TOKEN: ${{ secrets.HEADLAMP_TOKEN }}
           AUTHENTIK_USERNAME: ${{ secrets.AUTHENTIK_USERNAME }}
           AUTHENTIK_PASSWORD: ${{ secrets.AUTHENTIK_PASSWORD }}
