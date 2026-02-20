@@ -2,9 +2,6 @@
   "mcpServers": {
     "kubernetes (animaniacs)": {
       "type": "http",
-      "url": "http://kubernetes-mcp-server.kube-system.svc.cluster.local:8080",
-      "headers": {
-        "Authorization: Basic ${BEARER_TOKEN}"
-      }
+      "url": "http://kubernetes-mcp-server.kube-system.svc.cluster.local:8080"
     }
 }
